@@ -103,4 +103,5 @@ function handleImage(event) {
     };
     reader.readAsDataURL(file);
   }
-}
+} 
+//hello this is second commit
