@@ -12,7 +12,7 @@ function setTimer(seconds) {
 function breakGlass(event) {
   if (!isGameActive) {
     startGame();
-    document.getElementById('glassBox').textContent = '';
+    document.getElementById('glassBox').innerHTML = '';
     return;
   }
 
@@ -27,6 +27,7 @@ function breakGlass(event) {
   crack.style.top = `${event.clientY - event.target.offsetTop}px`;
   crack.style.width = `${Math.random() * 50 + 20}px`;
   crack.style.transform = `rotate(${Math.random() * 360}deg)`;
+  crack.style.zIndex = '10'; // Add this line
   event.target.appendChild(crack); 33
 
   // Create punch emoji
@@ -35,6 +36,7 @@ function breakGlass(event) {
   punch.className = 'punch';
   punch.style.left = `${event.clientX - event.target.offsetLeft}px`;
   punch.style.top = `${event.clientY - event.target.offsetTop}px`;
+  punch.style.zIndex = '11'; // Add this line
   event.target.appendChild(punch);
 
   // Play smash sound
@@ -104,4 +106,3 @@ function handleImage(event) {
     reader.readAsDataURL(file);
   }
 } 
-//hello this is second commit
