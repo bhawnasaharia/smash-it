@@ -3,6 +3,7 @@ let clicks = 0;
 let intervalId;
 let isGameActive = false;
 const smashSound = document.getElementById('smashSound');
+smashSound.preload = 'auto';
 
 function setTimer(seconds) {
   timer = seconds;
