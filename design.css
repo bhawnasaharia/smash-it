@@ -138,6 +138,5 @@ h1 {
   }
 }
 #glassBox {
-  overflow: hidden;
-  position: relative;
+  overflow: visible;
 }

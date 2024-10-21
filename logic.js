@@ -1,11 +1,8 @@
-document.addEventListener('DOMContentLoaded', function() {
-
-const smashSound = new Audio('./table-smash-47690.mp3');
-smashSound.preload = 'auto';
 let timer = 10;
 let clicks = 0;
 let intervalId;
 let isGameActive = false;
+const smashSound = document.getElementById('smashSound');
 
 function setTimer(seconds) {
   timer = seconds;
@@ -21,36 +18,30 @@ function breakGlass(event) {
 
   clicks++;
   document.getElementById('clickCounter').textContent = `${clicks} clicks`;
-  const glassBox = event.currentTarget;  // Changed from event.target
-  const rect = glassBox.getBoundingClientRect();
-  const x = event.clientX - rect.left;
-  const y = event.clientY - rect.top;
 
   // Create crack
   const crack = document.createElement('div');
   crack.innerText = "❌";
   crack.className = 'crack';
-  crack.style.left = `${x}px`;
-  crack.style.top = `${y}px`;;
+  crack.style.left = `${event.clientX - event.target.offsetLeft}px`;
+  crack.style.top = `${event.clientY - event.target.offsetTop}px`;
   crack.style.width = `${Math.random() * 50 + 20}px`;
   crack.style.transform = `rotate(${Math.random() * 360}deg)`;
   crack.style.zIndex = '10'; // Add this line
-  glassBox.appendChild(crack);
-
+  event.target.appendChild(crack); 33
 
   // Create punch emoji
   const punch = document.createElement('div');
   punch.textContent = '👊';
   punch.className = 'punch';
-  punch.style.left = `${x}px`;
-  punch.style.top = `${y}px`;
+  punch.style.left = `${event.clientX - event.target.offsetLeft}px`;
+  punch.style.top = `${event.clientY - event.target.offsetTop}px`;
   punch.style.zIndex = '11'; // Add this line
-  glassBox.appendChild(punch);
-
+  event.target.appendChild(punch);
 
   // Play smash sound
   smashSound.currentTime = 0;
-  smashSound.play().catch(e => console.log('Audio play failed:', e));
+  smashSound.play();
 
   // Remove punch emoji after animation
   setTimeout(() => {
@@ -114,6 +105,4 @@ function handleImage(event) {
     };
     reader.readAsDataURL(file);
   }
-}
-  document.getElementById('glassBox').addEventListener('click', breakGlass);
-}); 
+} 
