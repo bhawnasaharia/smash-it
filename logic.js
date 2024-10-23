@@ -1,6 +1,7 @@
 let clicks = 0;
 let intervalId;
 let isGameActive = false;
+let timer = 10; // Default timer value
 
 let audioContext;
 let smashBuffer;
@@ -41,10 +42,41 @@ function playSmashSound() {
 document.addEventListener('touchstart', initAudio, { once: true });
 document.addEventListener('click', initAudio, { once: true });
 
-// Update your event listener to handle both click and touchstart events
+// Attach event listeners to timer buttons
+document.getElementById('timer1').addEventListener('click', function() {
+  setTimer(1);
+});
+document.getElementById('timer5').addEventListener('click', function() {
+  setTimer(5);
+});
+document.getElementById('timer10').addEventListener('click', function() {
+  setTimer(10);
+});
+document.getElementById('timer20').addEventListener('click', function() {
+  setTimer(20);
+});
+document.getElementById('timer50').addEventListener('click', function() {
+  setTimer(50);
+});
+
+// Attach event listener to the upload image button
+document.getElementById('uploadImage').addEventListener('click', triggerImageUpload);
+
+// Attach event listener to the file input
+document.getElementById('imageInput').addEventListener('change', handleImage);
+
+// Attach event listener to the glass box
 const glassBox = document.getElementById('glassBox');
 glassBox.addEventListener('click', breakGlass);
 glassBox.addEventListener('touchstart', breakGlass);
+
+// Attach event listener to the close alert button
+document.getElementById('closeAlert').addEventListener('click', closeCustomAlert);
+
+function setTimer(seconds) {
+  timer = seconds;
+  document.getElementById('timerDisplay').textContent = `Timer: ${timer} sec`;
+}
 
 function breakGlass(event) {
   event.preventDefault(); // Prevent default touch behavior
@@ -59,8 +91,8 @@ function breakGlass(event) {
   document.getElementById('clickCounter').textContent = `${clicks} clicks`;
 
   // Adjust touch event coordinates if necessary
-  let x = event.clientX || event.touches[0].clientX;
-  let y = event.clientY || event.touches[0].clientY;
+  let x = event.clientX || (event.touches && event.touches[0].clientX);
+  let y = event.clientY || (event.touches && event.touches[0].clientY);
 
   // Create crack
   const crack = document.createElement('div');
@@ -92,14 +124,18 @@ function breakGlass(event) {
 }
 
 function startGame() {
+  clearInterval(intervalId); // Clear any existing interval
   isGameActive = true;
   clicks = 0;
   document.getElementById('clickCounter').textContent = `${clicks} clicks`;
 
+  // Update the timer display
+  document.getElementById('timerDisplay').textContent = `Timer: ${timer} sec`;
+
   intervalId = setInterval(() => {
     timer--;
-    document.getElementById('timerDisplay').textContent = `Timer: ${timer}`;
-    if (timer === 0) {
+    document.getElementById('timerDisplay').textContent = `Timer: ${timer} sec`;
+    if (timer <= 0) {
       clearInterval(intervalId);
       isGameActive = false;
       showCustomAlert(`Hurray! You clicked ${clicks} times.`);
@@ -107,13 +143,13 @@ function startGame() {
   }, 1000);
 }
 
-// Rest of your code remains the same...
-
-
 function showCustomAlert(message) {
   document.getElementById('alertMessage').textContent = message;
   document.getElementById('customAlert').style.display = 'block';
-  Congrats.play();
+  const Congrats = document.getElementById('Congrats');
+  if (Congrats) {
+    Congrats.play();
+  }
 }
 
 function closeCustomAlert() {
@@ -122,16 +158,14 @@ function closeCustomAlert() {
 }
 
 function resetGame() {
-  timer = 10;
+  timer = 10; // Reset to default value or keep last selected value
   clicks = 0;
-  document.getElementById('timerDisplay').textContent = 'Timer';
+  document.getElementById('timerDisplay').textContent = `Timer: ${timer} sec`;
   document.getElementById('clickCounter').textContent = 'Count';
   document.getElementById('glassBox').textContent = 'Click to start';
-  document.getElementById('glassBox').innerHTML = 'Click to start';
+  isGameActive = false;
+  clearInterval(intervalId);
 }
-
-resetGame();
-
 
 function triggerImageUpload() {
   document.getElementById('imageInput').click();
@@ -150,4 +184,6 @@ function handleImage(event) {
     };
     reader.readAsDataURL(file);
   }
-} 
+}
+
+resetGame();
