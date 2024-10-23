@@ -4,25 +4,6 @@ let intervalId;
 let isGameActive = false;
 const smashSound = document.getElementById('smashSound');
 smashSound.preload = 'auto';
-function initAudio() {
-  // Play the audio silently to initialize the audio context
-  smashSound.play().then(() => {
-    smashSound.pause();
-    smashSound.currentTime = 0;
-  }).catch((e) => {
-    // Handle the error if needed
-    console.error('Audio initialization error:', e);
-  });
-  
-  // Remove the event listener after initialization
-  document.removeEventListener('touchstart', initAudio);
-  document.removeEventListener('click', initAudio);
-}
-
-// Add event listeners to initialize audio on first user interaction
-document.addEventListener('touchstart', initAudio);
-document.addEventListener('click', initAudio);
-
 
 function setTimer(seconds) {
   timer = seconds;
