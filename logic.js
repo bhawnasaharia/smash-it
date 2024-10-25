@@ -78,8 +78,52 @@ function setTimer(seconds) {
   document.getElementById('timerDisplay').textContent = `Timer: ${timer} sec`;
 }
 
+// function breakGlass(event) {
+//   event.preventDefault(); // Prevent default touch behavior
+
+//   if (!isGameActive) {
+//     startGame();
+//     document.getElementById('glassBox').innerHTML = '';
+//     return;
+//   }
+
+//   clicks++;
+//   document.getElementById('clickCounter').textContent = `${clicks} clicks`;
+
+//   // Adjust touch event coordinates if necessary
+//   let x = event.clientX || (event.touches && event.touches[0].clientX);
+//   let y = event.clientY || (event.touches && event.touches[0].clientY);
+
+//   // Create crack
+//   const crack = document.createElement('div');
+//   crack.innerText = "❌";
+//   crack.className = 'crack';
+//   crack.style.left = `${x - event.target.offsetLeft}px`;
+//   crack.style.top = `${y - event.target.offsetTop}px`;
+//   crack.style.width = `${Math.random() * 50 + 20}px`;
+//   crack.style.transform = `rotate(${Math.random() * 360}deg)`;
+//   crack.style.zIndex = '10';
+//   event.target.appendChild(crack);
+
+//   // Create punch emoji
+//   const punch = document.createElement('div');
+//   punch.textContent = '👊';
+//   punch.className = 'punch';
+//   punch.style.left = `${x - event.target.offsetLeft}px`;
+//   punch.style.top = `${y - event.target.offsetTop}px`;
+//   punch.style.zIndex = '11';
+//   event.target.appendChild(punch);
+
+//   // Play smash sound using Web Audio API
+//   playSmashSound();
+
+//   // Remove punch emoji after animation
+//   setTimeout(() => {
+//     punch.remove();
+//   }, 500);
+// }
 function breakGlass(event) {
-  event.preventDefault(); // Prevent default touch behavior
+  event.preventDefault();
 
   if (!isGameActive) {
     startGame();
@@ -90,29 +134,39 @@ function breakGlass(event) {
   clicks++;
   document.getElementById('clickCounter').textContent = `${clicks} clicks`;
 
-  // Adjust touch event coordinates if necessary
-  let x = event.clientX || (event.touches && event.touches[0].clientX);
-  let y = event.clientY || (event.touches && event.touches[0].clientY);
+  // Get the glass box element and its dimensions
+  const glassBox = event.target;
+  const boxRect = glassBox.getBoundingClientRect();
 
-  // Create crack
+  // Calculate click position relative to the glass box
+  let x = (event.clientX || (event.touches && event.touches[0].clientX)) - boxRect.left;
+  let y = (event.clientY || (event.touches && event.touches[0].clientY)) - boxRect.top;
+
+  // Constrain coordinates within the glass box boundaries
+  x = Math.max(0, Math.min(x, boxRect.width));
+  y = Math.max(0, Math.min(y, boxRect.height));
+
+  // Create crack with constrained coordinates
   const crack = document.createElement('div');
   crack.innerText = "❌";
   crack.className = 'crack';
-  crack.style.left = `${x - event.target.offsetLeft}px`;
-  crack.style.top = `${y - event.target.offsetTop}px`;
+  crack.style.position = 'absolute';
+  crack.style.left = `${x}px`;
+  crack.style.top = `${y}px`;
   crack.style.width = `${Math.random() * 50 + 20}px`;
   crack.style.transform = `rotate(${Math.random() * 360}deg)`;
   crack.style.zIndex = '10';
-  event.target.appendChild(crack);
+  glassBox.appendChild(crack);
 
-  // Create punch emoji
+  // Create punch emoji with constrained coordinates
   const punch = document.createElement('div');
   punch.textContent = '👊';
   punch.className = 'punch';
-  punch.style.left = `${x - event.target.offsetLeft}px`;
-  punch.style.top = `${y - event.target.offsetTop}px`;
+  punch.style.position = 'absolute';
+  punch.style.left = `${x}px`;
+  punch.style.top = `${y}px`;
   punch.style.zIndex = '11';
-  event.target.appendChild(punch);
+  glassBox.appendChild(punch);
 
   // Play smash sound using Web Audio API
   playSmashSound();
