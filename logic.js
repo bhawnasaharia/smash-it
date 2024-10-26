@@ -215,13 +215,13 @@ function breakGlass(event) {
   // Determine which emoji to use based on click count
   let emoji;
   if (clicks > 50) {
-    emoji = '🗡️🗡️🗡️🗡️🗡️🗡️🗡️🗡️'; 
+    emoji = '🗡️🗡️🗡️🗡️'; 
   } else if (clicks > 35) {
-    emoji = '🔫🔫🔫🔫🔫🔫🔫🔫'; 
+    emoji = '🔫🔫🔫🔫'; 
   } else if (clicks > 15) {
-    emoji = '🦶🦶🦶🦶🦶🦶🦶🦶'; 
+    emoji = '🦶🦶🦶🦶'; 
   } else {
-    emoji = '👊👊👊👊👊👊👊👊'; 
+    emoji = '👊👊👊👊'; 
   }
 
   // Create action emoji with constrained coordinates
